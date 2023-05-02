@@ -1,0 +1,12 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "vamdb",
+            "group": "vamdb",
+            "database": "${workspaceFolder:visual_artist_marketplace}/vam.db"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
+}
