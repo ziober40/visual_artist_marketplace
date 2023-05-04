@@ -18,7 +18,12 @@ class TransactionRepository:
             validator = TransactionValidator()
             if(not validator.validate(transaction)):
                 print("deleting transaction")
-                transaction.delete()
+                self.delete_transaction(transaction.transaction_id)
+                return False
+
+            transaction.buy_order.is_executed = True
+            transaction.sell_order.is_executed = True
+            self.sess.commit()
 
         except Exception as e:
             print(e) 
