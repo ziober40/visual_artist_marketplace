@@ -36,7 +36,7 @@ def add_signup(req: OrderRequest, sess:Session = Depends(sess_db)):
     else: 
         return JSONResponse(content={'message':'create signup problem encountered'}, status_code=500)
 
-def parse_order_view(orders: List[Order]) -> List[OrderRequest]:
+def _parse_order_view(orders: List[Order]) -> List[OrderRequest]:
     return [OrderView(
         order_id=o.order_id,
         user_id=o.user_id,
@@ -51,7 +51,7 @@ def list_orders(sess:Session = Depends(sess_db)):
     repo:OrderRepository = OrderRepository(sess)
     result = repo.get_all_orders()
 
-    return parse_order_view(result)
+    return _parse_order_view(result)
 
 @router.patch("/order/cancel/{id}")
 async def cancel_order(order_id:int, sess:Session = Depends(sess_db)): 

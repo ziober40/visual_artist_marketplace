@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from db_config.connect import SessionFactory
 from models.requests import TransactionRequest
 from models.models import Transaction
+from models.views import TransactionView
 from repository.transaction import TransactionRepository
 from typing import List
 
@@ -18,7 +19,7 @@ def sess_db():
         db.close()
     
 @router.post("/transaction/add")
-def add_signup(req: TransactionRequest, sess:Session = Depends(sess_db)):
+def add_transaction(req: TransactionRequest, sess:Session = Depends(sess_db)):
     repo:TransactionRepository = TransactionRepository(sess)
 
     transaction = Transaction(
@@ -36,9 +37,11 @@ def add_signup(req: TransactionRequest, sess:Session = Depends(sess_db)):
     if result == True:
         return transaction
     else: 
-        return JSONResponse(content={'message':'create signup problem encountered'}, status_code=500)
+        return JSONResponse(content={'message':'create transaction problem encountered'}, status_code=500)
 
-@router.get("/transaction/list", response_model=List[TransactionRequest])
+
+
+@router.get("/transaction/list", response_model=List[TransactionView])
 def list_transactions(sess:Session = Depends(sess_db)):
     repo:TransactionRepository = TransactionRepository(sess)
     result = repo.get_all_transactions()

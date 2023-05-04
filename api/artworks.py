@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from db_config.connect import SessionFactory
 from models.requests import ArtworkRequest
 from models.models import Artwork
+from models.views import ArtworkView
 from repository.artwork import ArtworkRepository
 from typing import List
 
@@ -31,7 +32,7 @@ def add_signup(req: ArtworkRequest, sess:Session = Depends(sess_db)):
     else: 
         return JSONResponse(content={'message':'create signup problem encountered'}, status_code=500)
 
-@router.get("/artwork/list", response_model=List[ArtworkRequest])
+@router.get("/artwork/list", response_model=List[ArtworkView])
 def list_artworks(sess:Session = Depends(sess_db)):
     repo:ArtworkRepository = ArtworkRepository(sess)
     result = repo.get_all_artworks()
