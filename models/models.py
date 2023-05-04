@@ -17,6 +17,7 @@ class Order(Base):
     price = Column(Float)
     direction = Column(Boolean)
     is_canceled = Column(Boolean)
+    is_executed = Column(Boolean)
 
     users = relationship('User', back_populates="orders")
     artworks =  relationship('Artwork', back_populates="orders")

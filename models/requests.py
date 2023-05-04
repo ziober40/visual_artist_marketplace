@@ -10,15 +10,6 @@ from models.models import Direction
 # UserId = typing.NewType("UserId", int)
 # OrderId = typing.NewType("OrderId", int)
 # TransactionId = typing.NewType("TransactionId", int)
-# class TransactionRequest(BaseModel):
-#     user_id: UserId
-# class OrderRequest(BaseModel):
-#     user_id: UserId
-#     artwork_id: ArtworkId
-#     price: float
-#     direction: Direction
-# class CancelOrderRequest(BaseModel):
-#     order_id: OrderId
 
 
 class OrderRequest(BaseModel):

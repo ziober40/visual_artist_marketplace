@@ -8,7 +8,6 @@ from models.views import OrderView
 from repository.order import OrderRepository
 from typing import List
 
-
 router = APIRouter()
 
 def sess_db():
@@ -27,7 +26,8 @@ def add_signup(req: OrderRequest, sess:Session = Depends(sess_db)):
         artwork_id = req.artwork_id,
         price = req.price,
         direction = req.direction==Direction.buy,
-        is_canceled =  False
+        is_canceled =  False,
+        is_executed = False
         )
     
     result = repo.insert_order(order)
@@ -43,7 +43,8 @@ def _parse_order_view(orders: List[Order]) -> List[OrderRequest]:
         artwork_id=o.artwork_id,
         price=o.price,
         direction=Direction.buy if o.direction else  Direction.sell,
-        is_canceled=o.is_canceled
+        is_canceled=o.is_canceled,
+        is_executed=o.is_executed
     ) for o in orders]
 
 @router.get("/order/list", response_model=List[OrderView])

@@ -1,5 +1,3 @@
-import string
-import typing
 from typing import Any
 from enum import Enum
 from pydantic import BaseModel
@@ -37,3 +35,4 @@ class OrderView(BaseModel):
     price: float
     direction: Direction
     is_canceled: bool
+    is_executed: bool

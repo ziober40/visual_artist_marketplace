@@ -25,7 +25,8 @@ CREATE TABLE public.orders (
     artwork_id integer NOT NULL,
     price double precision NOT NULL,
     direction BOOLEAN NOT NULL DEFAULT FALSE,
-    is_canceled BOOLEAN NOT NULL DEFAULT FALSE
+    is_canceled BOOLEAN NOT NULL DEFAULT FALSE,
+    is_executed BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 -- NOTE: transactions doesn't need artwork id, artwork is tied to order id

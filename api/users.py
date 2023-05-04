@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from db_config.connect import SessionFactory
 from models.requests import UserRequest
 from models.models import User
+from models.views import UserView
 from repository.user import UserRepository
 from typing import List
 
@@ -32,7 +33,7 @@ def add_signup(req: UserRequest, sess:Session = Depends(sess_db)):
     else: 
         return JSONResponse(content={'message':'create signup problem encountered'}, status_code=500)
 
-@router.get("/user/list", response_model=List[UserRequest])
+@router.get("/user/list", response_model=List[UserView])
 def list_users(sess:Session = Depends(sess_db)):
     repo:UserRepository = UserRepository(sess)
     result = repo.get_all_users()
