@@ -19,7 +19,7 @@ def sess_db():
         db.close()
     
 @router.post("/user/add")
-def add_signup(req: UserRequest, sess:Session = Depends(sess_db)):
+def add_user(req: UserRequest, sess:Session = Depends(sess_db)) -> UserView:
     repo:UserRepository = UserRepository(sess)
 
     user = User(

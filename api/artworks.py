@@ -19,7 +19,7 @@ def sess_db():
         db.close()
     
 @router.post("/artwork/add")
-def add_signup(req: ArtworkRequest, sess:Session = Depends(sess_db)):
+def add_artwork(req: ArtworkRequest, sess:Session = Depends(sess_db)) -> ArtworkView:
     repo:ArtworkRepository = ArtworkRepository(sess)
 
     artwork = Artwork(

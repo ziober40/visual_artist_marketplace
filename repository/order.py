@@ -13,7 +13,6 @@ class OrderRepository:
         try:
             self.sess.add(order)
             self.sess.commit()
-            print(order.order_id)
         except Exception as e: 
             print(e)
             return False 

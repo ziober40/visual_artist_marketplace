@@ -1,3 +1,4 @@
+from ast import For
 from sqlalchemy import Column, ForeignKey, Integer, String, Float, Date, Boolean
 from sqlalchemy.orm import relationship
 from db_config.connect import Base
@@ -27,8 +28,11 @@ class Transaction(Base):
 
     transaction_id = Column(Integer, primary_key=True)
     price = Column(Float)
-    buy_order_id = Column(Integer, ForeignKey('orders.order_id'))
-    sell_order_id = Column(Integer, ForeignKey('orders.order_id'))
+    buy_order_id = Column(Integer, ForeignKey('orders.order_id'), nullable=False)
+    sell_order_id = Column(Integer, ForeignKey('orders.order_id'), nullable=False)
+
+    buy_order = relationship('Order', foreign_keys=[buy_order_id])
+    sell_order = relationship('Order',foreign_keys=[sell_order_id])
 
 class User(Base):
     __tablename__ = 'users'

@@ -18,7 +18,7 @@ def sess_db():
         db.close()
     
 @router.post("/order/add")
-def add_signup(req: OrderRequest, sess:Session = Depends(sess_db)):
+def add_order(req: OrderRequest, sess:Session = Depends(sess_db)) -> OrderView:
     repo:OrderRepository = OrderRepository(sess)
 
     order = Order(
@@ -32,11 +32,22 @@ def add_signup(req: OrderRequest, sess:Session = Depends(sess_db)):
     
     result = repo.insert_order(order)
     if result == True:
-        return order
+        return _parse_order_view(order)
     else: 
         return JSONResponse(content={'message':'create signup problem encountered'}, status_code=500)
 
-def _parse_order_view(orders: List[Order]) -> List[OrderRequest]:
+def _parse_order_view(o: Order) -> OrderView:
+    return OrderView(
+        order_id=o.order_id,
+        user_id=o.user_id,
+        artwork_id=o.artwork_id,
+        price=o.price,
+        direction=Direction.buy if o.direction else  Direction.sell,
+        is_canceled=o.is_canceled,
+        is_executed=o.is_executed
+    )
+
+def _parse_order_views(orders: List[Order]) -> List[OrderView]:
     return [OrderView(
         order_id=o.order_id,
         user_id=o.user_id,
@@ -52,7 +63,7 @@ def list_orders(sess:Session = Depends(sess_db)):
     repo:OrderRepository = OrderRepository(sess)
     result = repo.get_all_orders()
 
-    return _parse_order_view(result)
+    return _parse_order_views(result)
 
 @router.patch("/order/cancel/{id}")
 async def cancel_order(order_id:int, sess:Session = Depends(sess_db)): 

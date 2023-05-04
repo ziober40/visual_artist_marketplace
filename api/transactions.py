@@ -19,7 +19,7 @@ def sess_db():
         db.close()
     
 @router.post("/transaction/add")
-def add_transaction(req: TransactionRequest, sess:Session = Depends(sess_db)):
+def add_transaction(req: TransactionRequest, sess:Session = Depends(sess_db)) -> TransactionView:
     repo:TransactionRepository = TransactionRepository(sess)
 
     transaction = Transaction(
@@ -27,11 +27,6 @@ def add_transaction(req: TransactionRequest, sess:Session = Depends(sess_db)):
         buy_order_id = req.buy_order_id, 
         sell_order_id = req.sell_order_id, 
         )
-
-    #TODO:
-    # - check if order_ids exist
-    # - check if any of the orders hasn't been cancelled
-    # - check if price is between the range
 
     result = repo.insert_transaction(transaction)
     if result == True:

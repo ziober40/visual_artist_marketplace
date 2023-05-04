@@ -1,6 +1,7 @@
 from typing import Dict, Any
 from sqlalchemy.orm import Session
 from models.models import Transaction
+from repository.validators import TransactionValidator
 from sqlalchemy import desc
 
 
@@ -13,7 +14,12 @@ class TransactionRepository:
         try:
             self.sess.add(transaction)
             self.sess.commit()
-            print(transaction.transaction_id)
+
+            validator = TransactionValidator()
+            if(not validator.validate(transaction)):
+                print("deleting transaction")
+                transaction.delete()
+
         except Exception as e:
             print(e) 
             return False 
