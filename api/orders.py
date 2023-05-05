@@ -51,7 +51,7 @@ def add_order(req: OrderRequest, sess:Session = Depends(sess_db)) -> OrderView:
                     )
                 t_repo.insert_transaction(transaction)
 
-            if(not order.direction) and (order.price >= transaction_candidate.price):
+            if(not order.direction) and (order.price <= transaction_candidate.price):
                 t_repo = TransactionRepository(sess)
                 transaction = Transaction(
                     price = order.price, 
