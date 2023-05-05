@@ -23,6 +23,18 @@ class OrderRepository:
             return None
         return orders
 
+    def get_open_orders(self):
+        return self.sess.query(Order)\
+            .filter(Order.is_canceled == False)\
+            .filter(Order.is_executed == False)\
+            .all()
+
+    def get_executed_orders(self):
+        return self.sess.query(Order)\
+            .filter(Order.is_canceled == False)\
+            .filter(Order.is_executed == True)\
+            .all()
+
     def insert_order(self, order: Order) -> bool: 
         try:
             self.sess.add(order)

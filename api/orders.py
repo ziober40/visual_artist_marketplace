@@ -95,6 +95,20 @@ def list_orders(sess:Session = Depends(sess_db)):
 
     return _parse_order_views(result)
 
+@router.get("/order/open", response_model=List[OrderView])
+def open_orders(sess:Session = Depends(sess_db)):
+    repo:OrderRepository = OrderRepository(sess)
+    result = repo.get_open_orders()
+
+    return _parse_order_views(result)
+
+@router.get("/order/executed", response_model=List[OrderView])
+def executed_orders(sess:Session = Depends(sess_db)):
+    repo:OrderRepository = OrderRepository(sess)
+    result = repo.get_executed_orders()
+
+    return _parse_order_views(result)
+
 @router.patch("/order/cancel/{id}")
 async def cancel_order(order_id:int, sess:Session = Depends(sess_db)): 
     repo:OrderRepository = OrderRepository(sess)
