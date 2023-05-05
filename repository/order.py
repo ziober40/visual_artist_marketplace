@@ -1,18 +1,33 @@
+from tkinter import E
 from typing import Dict, Any
 from sqlalchemy.orm import Session
 from models.models import Order
 from sqlalchemy import desc
-
 
 class OrderRepository: 
     
     def __init__(self, sess:Session):
         self.sess:Session = sess
     
+    def get_matching_orders(self, order: Order):
+        try:
+            orders = self.sess.query(Order)\
+                .filter(Order.is_canceled == False)\
+                .filter(Order.is_executed == False)\
+                .filter(Order.artwork_id == order.artwork_id)\
+                .filter(Order.direction == (not order.direction))\
+                .order_by(Order.price.desc())\
+                .all()
+        except Exception as e:
+            print(e)
+            return None
+        return orders
+
     def insert_order(self, order: Order) -> bool: 
         try:
             self.sess.add(order)
             self.sess.commit()
+
         except Exception as e: 
             print(e)
             return False 
@@ -41,7 +56,7 @@ class OrderRepository:
    
     def delete_order(self, order_id:int) -> bool: 
         try:
-           signup = self.sess.query(Order).filter(Order.order_id == order_id).delete()
+           o = self.sess.query(Order).filter(Order.order_id == order_id).delete()
            self.sess.commit()
           
         except Exception as e: 

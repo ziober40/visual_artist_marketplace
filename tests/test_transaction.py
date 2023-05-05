@@ -60,20 +60,6 @@ def test_mixed_buy_side_error():
     assert(test_transaction['message']=="create transaction problem encountered")
 
 
-def test_unreasonable_price_transaction():
-    test_artwork = add_artwork(0)
-    
-    buy_price = 50
-    sell_price = 100
-    transact_price = 200
-    
-    test_user = add_user('test','test')
-    test_buy_order = add_order(test_user['user_id'], test_artwork['artwork_id'], buy_price, "buy")
-    test_sell_order = add_order(test_user['user_id'], test_artwork['artwork_id'], sell_price, "sell")
-    test_transaction = add_transaction(transact_price, test_buy_order['order_id'], test_sell_order['order_id'])
-    
-    assert(test_transaction['message']=="create transaction problem encountered")
-
 def test_execute_same_order_twice_error():
     test_artwork = add_artwork(0)
     

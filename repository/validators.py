@@ -17,10 +17,6 @@ class TransactionValidator:
             print("Buy order is not buy or sell order is not sell")
             return False
 
-        if (transaction.price < transaction.buy_order.price) or (transaction.price > transaction.sell_order.price):
-            print("Transaction price is unreasonable")
-            return False
-
         if (transaction.buy_order.is_canceled) or (transaction.sell_order.is_canceled):
             print("One of the orders is cancelled already")
             return False

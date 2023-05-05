@@ -3,10 +3,14 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from db_config.connect import SessionFactory
 from models.requests import Direction, OrderRequest
-from models.models import Order
+from models.models import Order,Transaction
 from models.views import OrderView
 from repository.order import OrderRepository
+from repository.transaction import TransactionRepository
+
 from typing import List
+
+import pandas as pd
 
 router = APIRouter()
 
@@ -31,6 +35,32 @@ def add_order(req: OrderRequest, sess:Session = Depends(sess_db)) -> OrderView:
         )
     
     result = repo.insert_order(order)
+    if(result):
+        matching_orders = repo.get_matching_orders(order)
+        
+        if(len(matching_orders)>0):
+
+            transaction_candidate = matching_orders[-1] if order.direction else matching_orders[0]
+
+            if(order.direction) and (order.price >= transaction_candidate.price):
+                t_repo = TransactionRepository(sess)
+                transaction = Transaction(
+                    price = order.price, 
+                    buy_order_id = order.order_id, 
+                    sell_order_id = transaction_candidate.order_id, 
+                    )
+                t_repo.insert_transaction(transaction)
+
+            if(not order.direction) and (order.price >= transaction_candidate.price):
+                t_repo = TransactionRepository(sess)
+                transaction = Transaction(
+                    price = order.price, 
+                    buy_order_id = transaction_candidate.order_id,
+                    sell_order_id = order.order_id
+                    )
+                t_repo.insert_transaction(transaction)
+
+
     if result == True:
         return _parse_order_view(order)
     else: 

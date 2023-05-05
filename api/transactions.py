@@ -35,7 +35,6 @@ def add_transaction(req: TransactionRequest, sess:Session = Depends(sess_db)) ->
         return JSONResponse(content={'message':'create transaction problem encountered'}, status_code=500)
 
 
-
 @router.get("/transaction/list", response_model=List[TransactionView])
 def list_transactions(sess:Session = Depends(sess_db)):
     repo:TransactionRepository = TransactionRepository(sess)
